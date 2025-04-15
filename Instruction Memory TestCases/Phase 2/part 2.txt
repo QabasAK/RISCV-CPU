@@ -1,0 +1,95 @@
+module instruction_memory(clk, address, read_data);
+  input clk;
+  input [31:0] address;
+  output reg [31:0] read_data;
+  
+  reg [7:0] memory [16383:0];
+  
+  initial 
+    begin       
+      memory[0]<=8'h9b;  // addi x1 x0 0x0f
+      memory[1]<=8'h00;
+      memory[2]<=8'hf0;
+      memory[3]<=8'h00;
+      
+      memory[4]<=8'h1b;  // addi x2 x0 0x12
+      memory[5]<=8'h01;
+      memory[6]<=8'h20;
+      memory[7]<=8'h01;
+      
+      memory[8]<=8'h33;  // add x0 x0 x0
+      memory[9]<=8'h60;
+      memory[10]<=8'h00;
+      memory[11]<=8'h00;
+      
+      memory[12]<=8'h33;  // add x0 x0 x0
+      memory[13]<=8'h60;
+      memory[14]<=8'h00;
+      memory[15]<=8'h00;
+      
+      memory[16]<=8'hb3;  // and x3 x1 x2
+      memory[17]<=8'hd1;
+      memory[18]<=8'h20;
+      memory[19]<=8'h00;
+      
+      memory[20]<=8'h13;  // andi x4 x2 0xF0
+      memory[21]<=8'h62;
+      memory[22]<=8'h01;
+      memory[23]<=8'h0f;
+      
+      memory[24]<=8'hb3;  // or x5 x3 x4
+      memory[25]<=8'hb2;
+      memory[26]<=8'h41;
+      memory[27]<=8'h00;
+      
+      memory[28]<=8'h13;  // ori x6 x2 0x75
+      memory[29]<=8'h73;
+      memory[30]<=8'h51;
+      memory[31]<=8'h07;
+      
+      memory[32]<=8'hb3;  // xor x7 x1 x2
+      memory[33]<=8'hf3;
+      memory[34]<=8'h20;
+      memory[35]<=8'h00;
+    end
+  
+  always @ (posedge clk)
+    begin 
+      read_data<={memory[address+3],memory[address+2],memory[address+1],memory[address]};
+    end 
+
+
+endmodule // instruction_memory
+
+module instruction_memory_testbench; 
+  reg clk;
+  reg [63:0] address;
+  wire [31:0] read_data;
+  
+  always #50 clk= ~ clk;
+  
+  instruction_memory testing(clk, address, read_data);
+  
+  initial
+    begin
+      clk=0;
+      address=0;
+      #100 $display("Instruction at address %h is %h",address, read_data);
+      address=4;
+      #100 $display("Instruction at address %h is %h",address, read_data);
+      address=8;
+      #100 $display("Instruction at address %h is %h",address, read_data);
+      address=12;
+      #100 $display("Instruction at address %h is %h",address, read_data);
+      address=16;
+      #100 $display("Instruction at address %h is %h",address, read_data);
+      address=20;
+      #100 $display("Instruction at address %h is %h",address, read_data);
+      address=24;
+      #100 $display("Instruction at address %h is %h",address, read_data);
+      address=28;
+      #100 $display("Instruction at address %h is %h",address, read_data);
+      address=32;
+      #100 $display("Instruction at address %h is %h",address, read_data);
+    end  
+endmodule 

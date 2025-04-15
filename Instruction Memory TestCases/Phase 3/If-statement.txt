@@ -1,0 +1,66 @@
+module instruction_memory(clk, address, read_data);
+  input clk;
+  input [31:0] address;
+  output reg [31:0] read_data;
+  
+  reg [7:0] memory [16383:0];
+  
+  initial 
+    begin      
+      memory[0]<=8'h9b;
+      memory[1]<=8'h00;
+      memory[2]<=8'hd0;
+      memory[3]<=8'h00;
+      
+      memory[4]<=8'h1b;
+      memory[5]<=8'h01;
+      memory[6]<=8'he0;
+      memory[7]<=8'h00;
+      
+      memory[8]<=8'hb3;
+      memory[9]<=8'hc2;
+      memory[10]<=8'h20;
+      memory[11]<=8'h00;
+      
+      memory[12]<=8'h1b;
+      memory[13]<=8'h03;
+      memory[14]<=8'h10;
+      memory[15]<=8'h00;
+      
+      memory[16]<=8'h63;
+      memory[17]<=8'h94;
+      memory[18]<=8'h62;
+      memory[19]<=8'h00;
+      
+      memory[20]<=8'h63;
+      memory[21]<=8'h86;
+      memory[22]<=8'h62;
+      memory[23]<=8'h00;
+      
+      memory[24]<=8'h9b;
+      memory[25]<=8'h01;
+      memory[26]<=8'h10;
+      memory[27]<=8'h00;
+      
+      memory[28]<=8'h63;
+      memory[29]<=8'h14;
+      memory[30]<=8'h00;
+      memory[31]<=8'h00;
+      
+      memory[32]<=8'h9b;
+      memory[33]<=8'h01;
+      memory[34]<=8'h00;
+      memory[35]<=8'h00;
+      
+      memory[36]<=8'h1b;
+      memory[37]<=8'h02;
+      memory[38]<=8'h12;
+      memory[39]<=8'h02;
+    end
+  
+  always @ (posedge clk)
+    begin 
+      read_data<={memory[address+3],memory[address+2],memory[address+1],memory[address]};
+    end 
+
+endmodule // instruction_memory
